@@ -1,4 +1,4 @@
-package basicSelenium;
+package ej1Clases;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -8,10 +8,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.Keys;
 
 import java.util.Date;
 
-public class BasicSeleniumTest {
+public class EJClases {
 
     WebDriver driver;
 
@@ -35,8 +36,7 @@ public class BasicSeleniumTest {
     }
 
     @Test
-    public void verifyCRUDProject() throws InterruptedException {
-
+    public void EJ1Clases() throws InterruptedException {
         // login
         driver.findElement(By.xpath("//img[contains(@src,'pagelogin')]")).click();
         driver.findElement(By.id("ctl00_MainContent_LoginControl1_TextBoxEmail")).sendKeys("bootcamp@mojix44.com");
@@ -47,7 +47,7 @@ public class BasicSeleniumTest {
                 ,"ERROR login was incorrect");
 
         // create
-        String nameProject="Mojix"+new Date().getTime();
+        String nameProject="GersonMojix"+new Date().getTime();
         driver.findElement(By.xpath("//td[text()='Add New Project']")).click();
         driver.findElement(By.id("NewProjNameInput")).sendKeys(nameProject);
         driver.findElement(By.id("NewProjNameButton")).click();
@@ -56,27 +56,21 @@ public class BasicSeleniumTest {
         Assertions.assertTrue(actualResult >= 1
                 ,"ERROR The project was not created");
 
-        nameProject="Update"+new Date().getTime();
-        // update
-        driver.findElement(By.xpath("//div[contains(@style,'block')]/img")).click();
-        driver.findElement(By.xpath("//ul[@id=\"projectContextMenu\"]//a[text()='Edit']")).click();
-        driver.findElement(By.xpath("//td/div/input[@id='ItemEditTextbox']")).clear();
-        driver.findElement(By.xpath("//td/div/input[@id='ItemEditTextbox']")).sendKeys(nameProject);
-        driver.findElement(By.xpath("//td/div/img[@id='ItemEditSubmit']")).click();
-        Thread.sleep(1000);
-        actualResult=driver.findElements(By.xpath(" //td[text()='"+nameProject+"'] ")).size();
-        Assertions.assertTrue(actualResult >= 1
-                ,"ERROR The project was not updated");
+        // create task
+        String nameTask = "Test task";
+        driver.findElement(By.id("NewItemContentInput")).click();
+        driver.findElement(By.id("NewItemContentInput")).sendKeys(nameTask);
+        driver.findElement(By.id("NewItemAddButton")).click();
 
-        // delete
-        driver.findElement(By.xpath("//div[contains(@style,'block')]/img")).click();
-        driver.findElement(By.id("ProjShareMenuDel")).click();
-        driver.switchTo().alert().accept();
         Thread.sleep(1000);
-        actualResult=driver.findElements(By.xpath(" //td[text()='"+nameProject+"'] ")).size();
-        Assertions.assertTrue(actualResult == 0
-                ,"ERROR The project was not removed");
+
+        // update task
+        String nameTaskUpdated = "New name";
+        driver.findElement(By.xpath("//div[@onclick='ProjectSelected(this);']//td[text()='"+ nameProject +"']")).click();
+        driver.findElement(By.xpath("//td[@class='MainTableRight']//div[text()='"+nameTask+"']")).click();
+        driver.findElement(By.xpath("//div[@class='ItemContentDiv UnderEditingItem']//textarea[@id='ItemEditTextbox']")).clear();
+        driver.findElement(By.xpath("//div[@class='ItemContentDiv UnderEditingItem']//textarea[@id='ItemEditTextbox']")).sendKeys(nameTaskUpdated, Keys.ENTER);
+
     }
 
 }
-
